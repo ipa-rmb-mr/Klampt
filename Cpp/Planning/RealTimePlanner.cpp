@@ -1240,7 +1240,8 @@ RRTPlanner::Node* DynamicRRTPlanner::TryIKExtend(RRTPlanner::Node* node,bool sea
   //add a node in the rrt tree
   State x=MakeState(qik);
   if(search) {
-    RRTPlanner::Node* closest = rrt->ClosestMilestone(x);
+    int index = rrt->ClosestMilestone(x);
+    RRTPlanner::Node* closest = rrt->milestoneNodes[index];
     return ((TreeRoadmapPlanner*)(rrt.get()))->Extend(closest,x);
   }
   else
@@ -1334,7 +1335,7 @@ int DynamicRRTPlanner::PlanFrom(ParabolicRamp::DynamicPath& path,Real cutoff)
     fprintf(flog,"Warning, start state is infeasible!\n");
   }
   RRTPlanner::Node* root = n;
-  assert(root == rrt->milestones[0]);
+  assert(root == rrt->milestoneNodes[0]);
   existingNodes.push_back(n);
   vector<RRTPlanner::Node*> iknodes;
   RRTPlanner::Node* nik = NULL;
@@ -1350,7 +1351,7 @@ int DynamicRRTPlanner::PlanFrom(ParabolicRamp::DynamicPath& path,Real cutoff)
     else {
       //fprintf(flog,"Deleted subtree derived from path ik %d\n",0);
       rrt->DeleteSubtree(nik);
-      //assert(root == rrt->milestones[0]);
+      //assert(root == rrt->milestoneNodes[0]);
     }
   }
   //extending path destinations
@@ -1364,7 +1365,7 @@ int DynamicRRTPlanner::PlanFrom(ParabolicRamp::DynamicPath& path,Real cutoff)
     if(!n->edgeFromParent()->IsVisible()) {
       fprintf(flog,"Prior path edge %d became infeasible\n",i);
       rrt->DeleteSubtree(n);
-      assert(root == rrt->milestones[0]);
+      assert(root == rrt->milestoneNodes[0]);
       break;
     }
     */
@@ -1399,8 +1400,8 @@ int DynamicRRTPlanner::PlanFrom(ParabolicRamp::DynamicPath& path,Real cutoff)
       assert(n->edgeFromParent()->Start() == n->getParent()->x);
     }
   }
-  for(size_t i=0;i<rrt->milestones.size();i++) {
-    n = rrt->milestones[i];
+  for(size_t i=0;i<rrt->milestoneNodes.size();i++) {
+    n = rrt->milestoneNodes[i];
     if(n->getParent() != NULL) {
       assert(n->edgeFromParent()->End() == n->x);
       assert(n->edgeFromParent()->Start() == n->getParent()->x);
@@ -1433,7 +1434,8 @@ int DynamicRRTPlanner::PlanFrom(ParabolicRamp::DynamicPath& path,Real cutoff)
     cspace->Sample(dest);
     x=MakeState(dest);
     //pick closest milestone, step in that direction
-    closest=rrt->ClosestMilestone(x);
+    int index = rrt->ClosestMilestone(x);
+    closest=rrt->milestoneNodes[index];
     q.setRef(closest->x,0,1,dest.n);
     Real dist=cspace->Distance(q,dest);
     if(dist > delta) {
@@ -1505,8 +1507,8 @@ int DynamicRRTPlanner::PlanFrom(ParabolicRamp::DynamicPath& path,Real cutoff)
     }
   }
   //sanity check
-  for(size_t i=0;i<rrt->milestones.size();i++) {
-    n = rrt->milestones[i];
+  for(size_t i=0;i<rrt->milestoneNodes.size();i++) {
+    n = rrt->milestoneNodes[i];
     if(n->getParent() != NULL) {
       assert(n->edgeFromParent()->End() == n->x);
       assert(n->edgeFromParent()->Start() == n->getParent()->x);
@@ -1517,7 +1519,7 @@ int DynamicRRTPlanner::PlanFrom(ParabolicRamp::DynamicPath& path,Real cutoff)
   if(bestNode) {
     fprintf(flog,"Successfully reduced path cost to %g with %g time left\n",bestPathCost,cutoff-timer.ElapsedTime());
     MilestonePath rampPath;
-    assert(root == rrt->milestones[0]);    
+    assert(root == rrt->milestoneNodes[0]);    
     n = bestNode;
     int parent = 0;
     while(n->getParent() != NULL) {
@@ -1531,10 +1533,10 @@ int DynamicRRTPlanner::PlanFrom(ParabolicRamp::DynamicPath& path,Real cutoff)
       parent += 0;
       n = n->getParent();
     }
-    Assert(bestNode == rrt->milestones[0] || bestNode->hasAncestor(rrt->milestones[0]));
-    rrt->CreatePath(rrt->milestones[0],bestNode,rampPath);
+    Assert(bestNode == rrt->milestoneNodes[0] || bestNode->hasAncestor(rrt->milestoneNodes[0]));
+    rrt->CreatePath(rrt->milestoneNodes[0],bestNode,rampPath);
     Assert(!rampPath.edges.empty());
-    Assert(rampPath.edges.front()->Start() == rrt->milestones[0]->x);
+    Assert(rampPath.edges.front()->Start() == rrt->milestoneNodes[0]->x);
 
     /*
     //test feasibility of last state
