@@ -1,7 +1,7 @@
 #!/bin/bash
-git pull
+git pull origin master
 cd Cpp/Dependencies/KrisLibrary
-git pull
+git pull origin master
 make
 cd ../../..
 rm -rf Python/build
