@@ -2,7 +2,7 @@
 #define RANDOMIZED_SELF_COLLISIONS_H
 
 #include <KrisLibrary/structs/array2d.h>
-#include "Modeling/Robot.h"
+#include <Klampt/Modeling/Robot.h>
 
 /** @file RandomizedSelfCollisions.h
  * @ingroup Modeling

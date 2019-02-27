@@ -149,8 +149,8 @@ IF(DOXYGEN_FOUND)
 ENDIF(DOXYGEN_FOUND)
 
 # Python API directory
-ADD_SUBDIRECTORY(Python)
-ADD_DEPENDENCIES(python Klampt)
+#ADD_SUBDIRECTORY(Python)
+#ADD_DEPENDENCIES(python Klampt)
 
 
 
@@ -185,9 +185,9 @@ if((NOT WIN32) AND KLAMPT_COMPILE_TESTS)
   add_subdirectory(tests)
 endif()
 
-IF(PYTHON)
-  install(CODE "execute_process(COMMAND \"cd Python; ${PYTHON} setup.py install\")" COMPONENT python)
-ENDIF(PYTHON)
+#IF(PYTHON)
+#  install(CODE "execute_process(COMMAND \"cd Python; ${PYTHON} setup.py install\")" COMPONENT python)
+#ENDIF(PYTHON)
 
 
 # Needs to be last statement:

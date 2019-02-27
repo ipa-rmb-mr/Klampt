@@ -10,7 +10,7 @@
 
 #include <vector>
 #include <KrisLibrary/math3d/primitives.h>
-#include "Modeling/Robot.h"
+#include <Klampt/Modeling/Robot.h>
 #include "urdf_link.h"
 using namespace std;
 using namespace Math3D;

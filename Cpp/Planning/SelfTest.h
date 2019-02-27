@@ -3,7 +3,7 @@
 
 #include "RobotCSpace.h"
 #include <KrisLibrary/planning/AnyMotionPlanner.h>
-#include "Modeling/DynamicPath.h"
+#include <Klampt/Modeling/DynamicPath.h>
 
 
 //tests shortcutting on randomly generated paths between a and b

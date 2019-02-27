@@ -6,8 +6,8 @@
 #include <KrisLibrary/meshing/PointCloud.h>
 #include "World.h"
 #include "MultiPath.h"
-#include "Contact/Stance.h"
-#include "Contact/Grasp.h"
+#include <Klampt/Contact/Stance.h>
+#include <Klampt/Contact/Grasp.h>
 using namespace std;
 
 /** @file Resources.h

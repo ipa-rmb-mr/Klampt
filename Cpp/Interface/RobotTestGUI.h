@@ -2,9 +2,9 @@
 #define ROBOTTESTGUI
 
 #include "WorldGUI.h"
-#include "View/RobotPoseWidget.h"
-#include "View/ObjectPoseWidget.h"
-#include "Sensing/Sensor.h"
+#include <Klampt/View/RobotPoseWidget.h>
+#include <Klampt/View/ObjectPoseWidget.h>
+#include <Klampt/Sensing/Sensor.h>
 #include "GLUIGUI.h"
 #include <fstream>
 using namespace Math3D;
