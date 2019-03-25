@@ -323,6 +323,19 @@ void ODESimulator::AddObject(RigidObject& object)
   dGeomSetCollideBits(objects.back()->geom(),0xffffffff);
 }
 
+void ODESimulator::RemoveObject(ODERigidObject* object)
+{
+  for ( size_t i=0; i<objects.size(); ++i )
+  {
+    if ( object == objects[i] )
+    {
+      objects.erase(objects.begin()+i);
+      delete object;
+      break;
+    }
+  }
+}
+
 string ODESimulator::ObjectName(const ODEObjectID& obj) const
 {
   if(obj.IsEnv()) return terrains[obj.index]->name.c_str();
@@ -1853,6 +1866,7 @@ bool ODESimulator::InstabilityCorrection()
   for(size_t i=0;i<robots.size();i++) {
     Real ke = robots[i]->GetKineticEnergy();
     id.SetRobot(i);
+
     bool unstable = false;
     double threshold = settings.instabilityMaxEnergyThreshold;
     if(!(ke < settings.instabilityMaxEnergyThreshold)) {
@@ -1874,7 +1888,7 @@ bool ODESimulator::InstabilityCorrection()
         robots[i]->SetVelocities(zero);
       }
       else {
-        LOG4CXX_INFO(GET_LOGGER(ODESimulator),"ODESimulator: Robot"<<robots[i]->robot.name<<" energy "<<ke<<" exceeds threshold "<<threshold);
+        //LOG4CXX_INFO(GET_LOGGER(ODESimulator),"ODESimulator: Robot "<<robots[i]->robot.name<<" energy "<<ke<<" exceeds threshold "<<threshold);
         Assert(ke > 0);
         Real newValue = 0;
         if(settings.instabilityPostCorrectionEnergy < 0)

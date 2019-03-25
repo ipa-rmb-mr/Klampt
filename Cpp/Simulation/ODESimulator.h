@@ -135,6 +135,8 @@ class ODESimulator
   ODERobot* robot(int i) const { return robots[i]; }
   ODERigidObject* object(int i) const { return objects[i]; }
 
+  void RemoveObject(ODERigidObject* object);
+
   string ObjectName(const ODEObjectID& obj) const;
   dBodyID ObjectBody(const ODEObjectID& obj) const;
   dGeomID ObjectGeom(const ODEObjectID& obj) const;
